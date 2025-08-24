@@ -1,8 +1,12 @@
 import { Button } from "@/components/ui/enhanced-button";
-import { Camera, Shield, MapPin, AlertTriangle } from "lucide-react";
+import { Camera, Shield, MapPin, AlertTriangle, LogIn, Eye } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import heroImage from "@/assets/hero-cityscape.jpg";
 
 export const HeroSection = () => {
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
@@ -58,14 +62,49 @@ export const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="hero" size="xl" className="min-w-48">
-              <Camera className="w-5 h-5" />
-              Report Billboard
-            </Button>
-            <Button variant="success" size="xl" className="min-w-48">
-              <Shield className="w-5 h-5" />
-              View Dashboard
-            </Button>
+            {user ? (
+              <>
+                <Button 
+                  variant="hero" 
+                  size="xl" 
+                  className="min-w-48"
+                  onClick={() => document.getElementById('reporting-section')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  <Camera className="w-5 h-5" />
+                  Report Billboard
+                </Button>
+                <Button 
+                  variant="success" 
+                  size="xl" 
+                  className="min-w-48"
+                  onClick={() => signOut()}
+                >
+                  <LogIn className="w-5 h-5" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button 
+                  variant="hero" 
+                  size="xl" 
+                  className="min-w-48"
+                  onClick={() => navigate('/auth')}
+                >
+                  <LogIn className="w-5 h-5" />
+                  Sign In to Report
+                </Button>
+                <Button 
+                  variant="success" 
+                  size="xl" 
+                  className="min-w-48"
+                  onClick={() => navigate('/auth')}
+                >
+                  <Eye className="w-5 h-5" />
+                  Create Account
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

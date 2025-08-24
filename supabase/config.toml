@@ -1,1 +1,7 @@
 project_id = "jxstukpnpvqiwaupbwqv"
+
+[functions.analyze-billboard]
+verify_jwt = false
+
+[functions.submit-report]
+verify_jwt = false
