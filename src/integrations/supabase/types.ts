@@ -14,7 +14,176 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      billboard_reports: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          location_address: string | null
+          location_lat: number
+          location_lng: number
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          location_address?: string | null
+          location_lat: number
+          location_lng: number
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          location_address?: string | null
+          location_lat?: number
+          location_lng?: number
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      permitted_billboards: {
+        Row: {
+          created_at: string
+          dimensions_height: number
+          dimensions_width: number
+          id: string
+          is_active: boolean | null
+          location_address: string
+          location_lat: number
+          location_lng: number
+          permit_expiry: string
+          permit_number: string
+        }
+        Insert: {
+          created_at?: string
+          dimensions_height: number
+          dimensions_width: number
+          id?: string
+          is_active?: boolean | null
+          location_address: string
+          location_lat: number
+          location_lng: number
+          permit_expiry: string
+          permit_number: string
+        }
+        Update: {
+          created_at?: string
+          dimensions_height?: number
+          dimensions_width?: number
+          id?: string
+          is_active?: boolean | null
+          location_address?: string
+          location_lat?: number
+          location_lng?: number
+          permit_expiry?: string
+          permit_number?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      restricted_zones: {
+        Row: {
+          created_at: string
+          id: string
+          location_lat: number
+          location_lng: number
+          radius_meters: number
+          zone_name: string
+          zone_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location_lat: number
+          location_lng: number
+          radius_meters?: number
+          zone_name: string
+          zone_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location_lat?: number
+          location_lng?: number
+          radius_meters?: number
+          zone_name?: string
+          zone_type?: string
+        }
+        Relationships: []
+      }
+      violations: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          description: string
+          id: string
+          report_id: string
+          severity: string
+          violation_type: string
+        }
+        Insert: {
+          confidence_score: number
+          created_at?: string
+          description: string
+          id?: string
+          report_id: string
+          severity: string
+          violation_type: string
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          description?: string
+          id?: string
+          report_id?: string
+          severity?: string
+          violation_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "violations_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "billboard_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
