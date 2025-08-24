@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/05278968-479c-43c9-aa16-f3942f2e0b48
+**URL**: https://cityscape-guardian.lovable.app
 
 ## How can I edit this code?
 
