@@ -10,7 +10,7 @@ There are several ways of editing your application.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/05278968-479c-43c9-aa16-f3942f2e0b48) and start prompting.
+Simply visit the [Lovable Project](https://cityscape-guardian.lovable.app) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
