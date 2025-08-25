@@ -22,6 +22,7 @@ export const ReportingInterface = () => {
   const [progress, setProgress] = useState(0);
   const [violations, setViolations] = useState<any[]>([]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [location, setLocation] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -64,6 +65,11 @@ export const ReportingInterface = () => {
     const file = event.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
       setSelectedFile(file);
+      
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+      
       if (!location) getCurrentLocation();
     } else {
       toast({
@@ -72,6 +78,17 @@ export const ReportingInterface = () => {
         description: "Please select an image file.",
       });
     }
+  };
+
+  // Clear image and preview
+  const clearImage = () => {
+    setSelectedFile(null);
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+      setImagePreview(null);
+    }
+    setAnalysisComplete(false);
+    setViolations([]);
   };
 
   const handleAnalyzeImage = async () => {
@@ -224,29 +241,74 @@ export const ReportingInterface = () => {
               </div>
 
               {/* Upload Area */}
-              <div 
-                className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                <div className="space-y-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
-                    <Camera className="w-8 h-8 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-foreground font-medium">
-                      {selectedFile ? selectedFile.name : "Click to upload image"}
-                    </p>
-                    <p className="text-sm text-muted-foreground">or drag and drop here</p>
+              {!imagePreview ? (
+                <div 
+                  className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                  <div className="space-y-4">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
+                      <Camera className="w-8 h-8 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-foreground font-medium">Click to upload image</p>
+                      <p className="text-sm text-muted-foreground">or drag and drop here</p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Image Preview */}
+                  <div className="relative rounded-lg overflow-hidden bg-muted">
+                    <img 
+                      src={imagePreview} 
+                      alt="Billboard preview" 
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute top-2 right-2">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={clearImage}
+                        className="h-8 w-8 p-0"
+                      >
+                        ×
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  {/* File Info */}
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-foreground">{selectedFile?.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {selectedFile && (selectedFile.size / 1024 / 1024).toFixed(1)}MB
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="mt-2"
+                    >
+                      Change Image
+                    </Button>
+                  </div>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </div>
+              )}
 
               {/* Location Info */}
               <div className="bg-muted/50 rounded-lg p-4">
